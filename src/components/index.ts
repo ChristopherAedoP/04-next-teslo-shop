@@ -14,3 +14,6 @@ export { ProductMobileSlideshow } from './product/slideshow/ProductMobileSlidesh
 //sidebar
 export { Sidebar } from './ui/sidebar/Sidebar';
 export { Footer } from './ui/footer/Footer';
+
+
+export { Pagination } from './ui/pagination/Pagination';
