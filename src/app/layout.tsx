@@ -6,8 +6,11 @@ import { geistMono, geistSans } from "@/config/fonts";
 
 
 export const metadata: Metadata = {
-  title: "Teslo | Shop",
-  description: "Curso next by chris",
+	title: {
+		template: '%s - Teslo | Shop',
+		default: 'Home - Teslo | Shop',
+	},
+	description: 'Curso next by chris',
 };
 
 export default function RootLayout({
