@@ -1,36 +1,35 @@
 'use client'
-import React, { useState } from 'react'
+
 import { IoAdd, IoRemoveOutline } from 'react-icons/io5';
 
 interface Props {
-     quantity: number;
+	quantity: number;
+	onQuantityChanged: (quantity: number) => void;
 }
 
-export const QuantitySelector = ({ quantity }: Props) => {
-	
-    const [count, setCount] = useState(quantity);
-    
-    const onQuantityChange = (value: number) => {
-        if (count + value < 1) return;
-        setCount(count + value);    
-    }
+export const QuantitySelector = ({ quantity, onQuantityChanged }: Props) => {
 
-    return (
-			<div className="flex ">
-				<button
-					onClick={() => onQuantityChange(-1)}
-					className="hover:cursor-pointer">
-					<IoRemoveOutline size={30} />
-				</button>
+	const onValueChange = (value: number) => {
+		if (quantity + value < 1) return;
+		onQuantityChanged(quantity + value);
+	};
 
-				<span className="w-15 mx-3 px-5 bg-gray-200/80 text-center rounded">
-					{count}
-				</span>
-				<button
-					onClick={() => onQuantityChange(+1)}
-					className="hover:cursor-pointer">
-					<IoAdd size={30} />
-				</button>
-			</div>
-		);
+	return (
+		<div className="flex ">
+			<button
+				onClick={() => onValueChange(-1)}
+				className="hover:cursor-pointer">
+				<IoRemoveOutline size={30} />
+			</button>
+
+			<span className="w-15 mx-3 px-5 bg-gray-200/80 text-center rounded">
+				{quantity}
+			</span>
+			<button
+				onClick={() => onValueChange(+1)}
+				className="hover:cursor-pointer">
+				<IoAdd size={30} />
+			</button>
+		</div>
+	);
 };

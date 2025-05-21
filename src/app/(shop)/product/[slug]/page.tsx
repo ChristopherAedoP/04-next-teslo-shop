@@ -9,11 +9,10 @@ import { getProductBySlug } from '@/actions';
 import {
 	ProductMobileSlideshow,
 	ProductSlideshow,
-	QuantitySelector,
-	SizeSelector,
 	StockLabel,
 } from '@/components';
 import { Metadata } from 'next';
+import { AddToCart } from './ui/AddToCart';
 
 interface Props {
 	params: Promise<{ slug: string }>;
@@ -75,15 +74,8 @@ export default async function ProductPage({ params }: Props) {
 				</h1>
 				<p className="text-lg mb-5">$ {product.price}</p>
 
-				{/* Tallas */}
-				<SizeSelector
-					selectedSize={product.sizes[2]} // Cambiar por el tamaño seleccionado
-					availableSizes={product.sizes}
-				/>
-				{/* cantiadas */}
-				<QuantitySelector quantity={2} />
-				{/* botton */}
-				<button className="btn-primary my-5 ">Agregar al carrito</button>
+				<AddToCart
+					product={product}/>
 
 				{/* descripcion */}
 
