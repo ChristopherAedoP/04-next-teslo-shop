@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import { geistMono, geistSans } from "@/config/fonts";
-
+import { Provider } from "@/components";
 
 
 export const metadata: Metadata = {
@@ -13,18 +13,17 @@ export const metadata: Metadata = {
 	description: 'Curso next by chris',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+		<html lang="es">
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+				<Provider>{children}</Provider>
+			</body>
+		</html>
+	);
 }
