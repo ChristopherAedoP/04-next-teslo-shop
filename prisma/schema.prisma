@@ -66,15 +66,42 @@ model ProductImage {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   password      String
-  role          Role      @default(user)
+  role          Role         @default(user)
   image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  address       UserAddress?
+}
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model Country {
+  id   String @id
+  name String @unique
+  code String @unique
 
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  Address   UserAddress[]
+}
+
+model UserAddress {
+  id          String  @id @default(uuid())
+  firstName   String
+  lastName    String
+  address     String
+  address2    String?
+  postalCode  String
+  phone       String
+  city        String
+  country     Country @relation(fields: [countryCode], references: [code])
+  countryCode String
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

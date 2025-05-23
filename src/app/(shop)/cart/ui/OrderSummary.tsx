@@ -17,7 +17,7 @@ export const OrderSummary = () => {
 
 	useEffect(() => {
 		setLoaded(true);
-	});
+	}, []);
 
 	if (!loaded) return <p>Loading...</p>;
 

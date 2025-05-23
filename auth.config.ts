@@ -51,7 +51,7 @@ export const authConfig: NextAuthConfig = {
 		},
 		async session({ session, token }) {
 			if (token) {
-				session.user = token.data as any;
+				session.user = token.data as typeof session.user;
 			}
 			return session;
 		},
