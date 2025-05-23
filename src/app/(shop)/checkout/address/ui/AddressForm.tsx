@@ -51,10 +51,10 @@ export default function AddressForm({ countries, userStoredAddress = {} }: Props
 
 	const onSubmit = async (data: InputForm) => {
 		//console.log(data);
-		setAddress(data);
-
+		
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { rememberAddress, ...restData }: InputForm = data;
+		setAddress(restData);
 		if (data.rememberAddress) {
 			await setUserAddress(restData, session!.user.id);
 		} else {

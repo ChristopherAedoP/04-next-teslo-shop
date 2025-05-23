@@ -16,6 +16,7 @@ interface State {
 	getTotalItems: () => number;
 	updateProductQuantity: (product: CartProduct, quantity: number) => void;
 	removeProduct: (product: CartProduct) => void;
+	clearCart: () => void;
 }
 
 export const useCartStore = create<State>()(
@@ -24,7 +25,8 @@ export const useCartStore = create<State>()(
 			cart: [],
 
 			//metodos
-
+			//0. clear cart
+			clearCart: () => set({ cart: [] }),
 			// 1. contar productos en el carrito
 			getTotalItems: () => {
 				const { cart } = get();
