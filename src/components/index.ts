@@ -1,22 +1,16 @@
-/** @format */
-
-export { TopMenu } from './ui/top-menu/TopMenu';
-export { PageNotFound } from './ui/not-found/PageNotFound';
-export { Title } from './ui/title/Title';
-
-// Product
-export { ProductGrid } from './products/product-grid/ProductGrid';
-export { ProductGridItem } from './products/product-grid/ProductGridItem';
-export { SizeSelector } from './product/size-selector/SizeSelector';
-export { QuantitySelector } from './product/quantity-selector/QuantitySelector';
-export { ProductSlideshow } from './product/slideshow/ProductSlideshow';
-export { ProductMobileSlideshow } from './product/slideshow/ProductMobileSlideshow';
-export { StockLabel } from './product/stock-label/StockLabel';
-//sidebar
-export { Sidebar } from './ui/sidebar/Sidebar';
-export { Footer } from './ui/footer/Footer';
-
-
-export { Pagination } from './ui/pagination/Pagination';
-
-export { Provider } from './providers/Provider';
+export * from './orders/OrderStatus';
+export * from './paypal/PayPalButton';
+export * from './product/quantity-selector/QuantitySelector';
+export * from './product/size-selector/SizeSelector';
+export * from './product/slideshow/ProductMobileSlideshow';
+export * from './product/slideshow/ProductSlideshow';
+export * from './product/stock-label/StockLabel';
+export * from './products/product-grid/ProductGrid';
+export * from './products/product-grid/ProductGridItem';
+export * from './providers/Providers';
+export * from './ui/footer/Footer';
+export * from './ui/not-found/PageNotFound';
+export * from './ui/pagination/Pagination';
+export * from './ui/sidebar/Sidebar';
+export * from './ui/title/Title';
+export * from './ui/top-menu/TopMenu';
