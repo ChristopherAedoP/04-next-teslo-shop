@@ -3,7 +3,7 @@
 'use client';
 
 import { getStockBySlug } from '@/actions';
-
+import { titleFont } from '@/config/fonts';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -30,7 +30,7 @@ export const StockLabel = ({ slug }: Props) => {
 			{!loading ? (
 				<div className="flex items-center w-full transition-all ">
 					<h1
-						className={` transition-all antialiased font-bold text-lg`}>
+						className={`${titleFont.className} transition-all antialiased font-bold text-lg`}>
 						Stock: {stock}
 					</h1>
 				</div>
