@@ -1,69 +1,93 @@
 /** @format */
+
 'use client';
 
 import { QuantitySelector, SizeSelector } from '@/components';
-import { CartProduct, Product, Size } from '@/interfaces';
+import { Product, Size } from '@/interfaces';
 import { useCartStore } from '@/store';
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { IoCheckmarkOutline } from 'react-icons/io5';
 
 interface Prop {
 	product: Product;
 }
 
 export const AddToCart = ({ product }: Prop) => {
+	const addProductToCart = useCartStore((s) => s.addProductToCart);
+	const [size, setSize] = useState<Size>();
+	const [quantity, setQuantity] = useState(1);
+	const [errorPosted, setErrorPosted] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 
-    const addProductToCart = useCartStore(state => state.addProductToCart);
-
-	const [size, setSize] = useState<Size | undefined>();
-	const [quantity, setQuantity] = useState<number>(1);
-	const [posted, setPosted] = useState(false);
+	const CONFIRM_DURATION = 1000; // 1 segundo
 
 	const addToCart = () => {
-        setPosted(true);
-        if (!size) return;
-		//console.log(size, quantity);
-        
-        const cartProducto: CartProduct = {
-            id: product.id,
-            slug: product.slug,
-            title: product.title,
-            size: size,
-            quantity: quantity,
-            image: product.images[0],
-            price: product.price,
-        }
+		if (!size) {
+			setErrorPosted(true);
+			setTimeout(() => setErrorPosted(false), 2000);
+			return;
+		}
 
-        addProductToCart(cartProducto);
+		addProductToCart({
+			id: product.id,
+			slug: product.slug,
+			title: product.title,
+			size,
+			quantity,
+			image: product.images[0],
+			price: product.price,
+		});
 
-        setPosted(false);
-        setSize(undefined);
-        setQuantity(1);
+		setSize(undefined);
+		setQuantity(1);
+
+		setShowConfirm(true);
+		setTimeout(() => setShowConfirm(false), CONFIRM_DURATION);
 	};
 
 	return (
 		<>
-			{/* Tallas */}
-			{posted && !size && (
-				<span className="text-red-500 text-sm mt-1 fade-in transition-all">
+			{/* Error de talla */}
+			{errorPosted && (
+				<span className="text-red-500 text-sm mt-1 block">
 					* Debes seleccionar una talla
 				</span>
 			)}
 
 			<SizeSelector
-				selectedSize={size} // Cambiar por el tamaño seleccionado
+				selectedSize={size}
 				availableSizes={product.sizes}
-				onSizeChanged={(size) => setSize(size)}
+				onSizeChanged={setSize}
 			/>
 
-			{/* cantiadas */}
-			<QuantitySelector
-				quantity={quantity}
-				onQuantityChanged={(quantity) => setQuantity(quantity)}
-			/>
-			{/* botton */}
-			<button onClick={addToCart} className="btn-primary my-5 ">
-				Agregar al carrito
-			</button>
+			<QuantitySelector quantity={quantity} onQuantityChanged={setQuantity} />
+
+			{/* Botón que se reemplaza */}
+			<motion.button
+				onClick={addToCart}
+				disabled={showConfirm}
+				whileTap={!showConfirm ? { scale: 0.95 } : {}}
+				className={`
+    w-full mt-5 flex items-center justify-center gap-2 
+    text-white font-medium 
+    ${
+			showConfirm
+				? 'bg-green-600 hover:bg-green-700'
+				: 'bg-blue-600 hover:bg-blue-700'
+		}  
+    px-6 py-3 rounded-lg transition-colors duration-200
+    ${showConfirm ? 'cursor-default' : 'cursor-pointer'}
+  `}>
+				{showConfirm ? (
+					<>
+						<IoCheckmarkOutline size={20} />
+						Producto añadido
+					</>
+				) : (
+					'Agregar al carrito'
+				)}
+			</motion.button>
 		</>
 	);
 };

@@ -18,9 +18,7 @@ interface Props {
 	params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata(
-	{ params }: Props
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params;
 
 	const product = await getProductBySlug(slug);
@@ -74,8 +72,7 @@ export default async function ProductPage({ params }: Props) {
 				</h1>
 				<p className="text-lg mb-5">$ {product.price}</p>
 
-				<AddToCart
-					product={product}/>
+				<AddToCart product={product} />
 
 				{/* descripcion */}
 
