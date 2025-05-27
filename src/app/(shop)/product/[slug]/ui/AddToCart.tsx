@@ -70,13 +70,13 @@ export const AddToCart = ({ product }: Prop) => {
 				whileTap={!showConfirm ? { scale: 0.95 } : {}}
 				className={`
     w-full mt-5 flex items-center justify-center gap-2 
-    text-white font-medium 
+    text-white font-medium mb-4
     ${
 			showConfirm
 				? 'bg-green-600 hover:bg-green-700'
 				: 'bg-blue-600 hover:bg-blue-700'
 		}  
-    px-6 py-3 rounded-lg transition-colors duration-200
+    px-4 sm:px-6 py-3 rounded-lg  transition-colors duration-200
     ${showConfirm ? 'cursor-default' : 'cursor-pointer'}
   `}>
 				{showConfirm ? (
