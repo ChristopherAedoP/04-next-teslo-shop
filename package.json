@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "build:migrate": "npm run prisma:deplyoy && next build",
+    "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:deplyoy": "npx prisma migrate deploy && prisma generate",
+    "prisma:generate": "npx prisma generate",
     "seed": "ts-node src/seed/seed-database.ts"
   },
   "dependencies": {
