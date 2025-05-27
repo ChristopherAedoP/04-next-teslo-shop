@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm rebuild lightningcss && next build",
+    "build": "next build",
     "build:migrate": "npm run prisma:deplyoy && next build",
     "start": "next start",
     "lint": "next lint",
