@@ -2,15 +2,19 @@
 
 'use client';
 
-import { createUpdateProduct, deleteImageProduct } from '@/actions';
-import { ProductImage as ProductImageComponent } from '@/components';
-import { Category, Product, ProductImage } from '@/interfaces';
-import clsx from 'clsx';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import {
+	Category,
+	Product,
+	ProductImage as ProductWithImage,
+} from '@/interfaces';
+import clsx from 'clsx';
+import { createUpdateProduct, deleteImageProduct } from '@/actions';
+import { useRouter } from 'next/navigation';
+import { ProductImage } from '@/components';
 
 interface Props {
-	product: Partial<Product> & { ProductImage?: ProductImage[] };
+	product: Partial<Product> & { ProductImage?: ProductWithImage[] };
 	categories: Category[];
 }
 
@@ -21,12 +25,13 @@ interface FormInputs {
 	slug: string;
 	description: string;
 	price: number;
+	inStock: number;
 	sizes: string[];
 	tags: string;
 	gender: 'men' | 'women' | 'kid' | 'unisex';
 	categoryId: string;
-	inStock: number;
-	images?: FileList
+
+	images?: FileList;
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
@@ -41,23 +46,29 @@ export const ProductForm = ({ product, categories }: Props) => {
 	} = useForm<FormInputs>({
 		defaultValues: {
 			...product,
-			tags: product.tags?.join(', ') ?? '', // Convert array to string for input
-			sizes: product.sizes ?? [], // Convert array to string for input
+			tags: product.tags?.join(', '),
+			sizes: product.sizes ?? [],
 
-			images: undefined, // Initialize images as undefined
+			images: undefined,
 		},
 	});
 
-	watch('sizes'); // Watch sizes to trigger re-render when they change
+	watch('sizes');
+
+	const onSizeChanged = (size: string) => {
+		const sizes = new Set(getValues('sizes'));
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+		setValue('sizes', Array.from(sizes));
+	};
 
 	const onSubmit = async (data: FormInputs) => {
 		const formData = new FormData();
 
 		const { images, ...productToSave } = data;
 
-		// Append form data
 		if (product.id) {
-			formData.append('id', product.id);
+			formData.append('id', product.id ?? '');
 		}
 
 		formData.append('title', productToSave.title);
@@ -76,26 +87,14 @@ export const ProductForm = ({ product, categories }: Props) => {
 			}
 		}
 
-		const { ok, product: savedProduct } = await createUpdateProduct(formData);
+		const { ok, product: updatedProduct } = await createUpdateProduct(formData);
 
 		if (!ok) {
-			alert('Error al guardar el producto');
+			alert('Producto no se pudo actualizar');
 			return;
 		}
 
-		router.replace(`/admin/product/${savedProduct?.slug}`); // Redirect to the new product/admin/product');
-	};
-
-	const onSizeChange = (size: string) => {
-		const sizes = new Set(getValues('sizes'));
-
-		if (sizes.has(size)) {
-			sizes.delete(size);
-		} else {
-			sizes.add(size);
-		}
-
-		setValue('sizes', Array.from(sizes), { shouldValidate: true });
+		router.replace(`/admin/product/${updatedProduct?.slug}`);
 	};
 
 	return (
@@ -163,17 +162,10 @@ export const ProductForm = ({ product, categories }: Props) => {
 
 				<div className="flex flex-col mb-2">
 					<span>Categoria</span>
-					{/* <select className="p-2 border rounded-md bg-gray-200">
-						<option value="">[Seleccione]</option>
-					</select> */}
-
 					<select
-						className={clsx('p-2 border rounded-md bg-gray-200')}
-						{...register('categoryId', { required: true, min: 0 })}
-						//value={product.gender}
-					>
-						<option value="">[ Seleccione ]</option>
-
+						className="p-2 border rounded-md bg-gray-200"
+						{...register('categoryId', { required: true })}>
+						<option value="">[Seleccione]</option>
 						{categories.map((category) => (
 							<option key={category.id} value={category.id}>
 								{category.name}
@@ -204,12 +196,11 @@ export const ProductForm = ({ product, categories }: Props) => {
 							// bg-blue-500 text-white <--- si está seleccionado
 							<div
 								key={size}
-								onClick={() => onSizeChange(size)}
+								onClick={() => onSizeChanged(size)}
 								className={clsx(
-									'p-2 border rounded-md mr-2 mb-2 w-14 transition-all cursor-pointer text-center',
+									'p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center',
 									{
 										'bg-blue-500 text-white': getValues('sizes').includes(size),
-										'bg-gray-200': !getValues('sizes').includes(size),
 									}
 								)}>
 								<span>{size}</span>
@@ -221,26 +212,27 @@ export const ProductForm = ({ product, categories }: Props) => {
 						<span>Fotos</span>
 						<input
 							type="file"
+							{...register('images')}
 							multiple
 							className="p-2 border rounded-md bg-gray-200"
 							accept="image/png, image/jpeg, image/avif"
-							{...register('images')}
 						/>
 					</div>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 						{product.ProductImage?.map((image) => (
 							<div key={image.id}>
-								<ProductImageComponent
+								<ProductImage
 									alt={product.title ?? ''}
 									src={image.url}
 									width={300}
 									height={300}
 									className="rounded-t shadow-md"
 								/>
+
 								<button
 									type="button"
-									onClick={() => deleteImageProduct(image.id, image.url)}
+									onClick={() => deleteImageProduct(Number(image.id), image.url)}
 									className="btn-danger w-full rounded-b-xl">
 									Eliminar
 								</button>

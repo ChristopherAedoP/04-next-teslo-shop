@@ -12,7 +12,7 @@ export async function authenticate(
 	formData: FormData
 ) {
 	try {
-		console.log('FormData:', formData);
+		//console.log('FormData:', formData);
 		await signIn('credentials', {
 			...Object.fromEntries(formData),
 			redirect: false,

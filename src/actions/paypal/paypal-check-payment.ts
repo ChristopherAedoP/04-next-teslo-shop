@@ -28,7 +28,7 @@ export const paypalCheckPayment = async (paypalTransactionId: string) => {
 	}
 
 	const { purchase_units, status } = result;
-	console.log('purchase_units', purchase_units, status);
+	//console.log('purchase_units', purchase_units, status);
 	const { invoice_id: orderId } = purchase_units[0];
 
 	if (status !== 'COMPLETED') {

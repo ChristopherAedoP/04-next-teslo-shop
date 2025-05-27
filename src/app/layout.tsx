@@ -7,8 +7,8 @@ import { Providers } from '@/components';
 
 export const metadata: Metadata = {
 	title: {
-		template: '%s - Teslo | Shop',
-		default: 'Home - Teslo | Shop',
+		template: '%s - Chris | Shop',
+		default: 'Home - Chris | Shop',
 	},
 	description: 'Curso next by chris',
 };

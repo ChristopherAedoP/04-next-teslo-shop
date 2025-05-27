@@ -1,32 +1,47 @@
 /** @format */
 
-import { getCategories, getProductBySlug } from "@/actions";
-import { Title } from "@/components";
-import { redirect } from "next/navigation";
-import { ProductForm } from "./ui/ProductForm";
+import { getCategories, getProductBySlug } from '@/actions';
+import { Title } from '@/components';
+import { redirect } from 'next/navigation';
+import { ProductForm } from './ui/ProductForm';
 
 interface Props {
 	params: Promise<{ slug: string }>;
 }
+
 export default async function ProductPage({ params }: Props) {
 	const { slug } = await params;
-    
-	const [product, categories ] = await Promise.all([
-		getProductBySlug(slug),
-		getCategories()
-	]); 
-	
-    if (!product && slug !== 'new') {
-        redirect(`/admin/products`);
-    }
 
-    const  title = (slug === 'new') ? 'Nuevo Producto' : `Editar Producto: ${product?.title}`;
-    
+	const [product, categories] = await Promise.all([
+		getProductBySlug(slug),
+		getCategories(),
+	]);
+
+	if (!product && slug !== 'new') {
+		redirect('/admin/products');
+	}
+
+	const title = slug === 'new' ? 'Nuevo producto' : 'Editar producto';
+
 	return (
 		<>
 			<Title title={title} />
 
-			<ProductForm product={product ?? {}} categories={categories} />
+			<ProductForm
+				product={
+					product
+						? {
+								...product,
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any
+								ProductImage: product.ProductImage?.map((img: any) => ({
+									...img,
+									id: String(img.id),
+								})),
+						  }
+						: {}
+				}
+				categories={categories}
+			/>
 		</>
 	);
 }

@@ -111,7 +111,7 @@ export const createUpdateProduct = async (formData: FormData) => {
 			};
 		});
 
-		console.log('Transaction completed:', prismaTx);
+		//console.log('Transaction completed:', prismaTx);
 
 		revalidatePath('/admin/product');
 		revalidatePath(`/admin/product/${prismaTx.product.slug}`);

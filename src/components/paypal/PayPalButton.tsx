@@ -47,7 +47,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
 			],
 		});
 
-		console.log({ transactionId });
+		//console.log({ transactionId });
 		const { ok } = await setTransactionId({ transactionId, orderId });
 		if (!ok) {
 			throw new Error('Error al crear la transaccion');
@@ -59,7 +59,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
 	const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
 		const details = await actions.order?.capture();
 
-		console.log(details);
+		//console.log(details);
 		if (!details) return;
 
 		await paypalCheckPayment(details.id ?? '');
