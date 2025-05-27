@@ -1,10 +1,9 @@
 /** @format */
 
 import { getOrderById } from '@/actions';
-import { OrderStatus, PayPalButton, Title } from '@/components';
+import { OrderStatus, PayPalButton, ProductImage, Title } from '@/components';
 
 import { currencyFormat } from '@/utils';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 interface Props {
@@ -33,16 +32,12 @@ export default async function OrderPage({ params }: Props) {
 						{/* items */}
 						{items.map((item, index) => (
 							<div key={index} className="flex mb-5 ">
-								<Image
-									src={`/products/${item.product.ProductImage[0].url}`}
+								<ProductImage
+									src={item.product.ProductImage[0].url}
 									alt={item.product.title}
 									width={100}
 									height={100}
-									style={{
-										width: '100px',
-										height: '100px',
-									}}
-									className="mr-5 rounded"
+									className="w-[100px] h-[100px] mr-5 rounded"
 								/>
 
 								<div className="flex flex-col">
